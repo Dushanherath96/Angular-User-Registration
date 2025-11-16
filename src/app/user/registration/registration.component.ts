@@ -5,6 +5,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-registration',
@@ -12,7 +13,10 @@ import {
   styles: [],
 })
 export class RegistrationComponent {
-  constructor(public formBuilder: FormBuilder) {}
+  constructor(
+    public formBuilder: FormBuilder,
+    private authService: AuthService
+  ) {}
   isSubmitted: boolean = false;
 
   // Custom validator to check if password and confirmPassword match
@@ -48,7 +52,20 @@ export class RegistrationComponent {
 
   onSubmit() {
     this.isSubmitted = true;
-    console.log(this.form.value);
+    if (this.form.valid) {
+      // Send form data to backend via AuthService
+      const payload = this.form.value;
+      this.authService.createUser(this.form.value).subscribe({
+        next: (res: any) => {
+          if (res.succeeded) {
+            this.form.reset();
+            this.isSubmitted = false;
+          }
+          console.log('Registration successful', res);
+        },
+        error: (err) => console.log('error', err),
+      });
+    }
   }
 
   // Method to check if a control has displayable error

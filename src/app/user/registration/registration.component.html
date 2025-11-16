@@ -49,6 +49,10 @@
     <div class="mb-3"><input type="password"
             class="form-control bg-body-secondary"
             placeholder="Confirm Password" formControlName="confirmPassword">
+        <div class="error-feedback"
+            *ngIf="hasDisplayableError('confirmPassword') && form.controls.confirmPassword.hasError('passwordMismatch')">
+            Passwords do not match.
+        </div>
     </div>
     <div class="mt-4">
         <button type="submit" class="btn btn-success w-100 rounded-3">
