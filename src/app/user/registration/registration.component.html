@@ -5,14 +5,46 @@
     <div class="mb-3"><input
             class="form-control bg-body-secondary"
             placeholder="Full Name" formControlName="fullName">
+        <div class="error-feedback"
+            *ngIf="hasDisplayableError('fullName') && form.controls.fullName.hasError('required')">
+            Full Name is Required.
+        </div>
     </div>
     <div class="mb-3"><input
             class="form-control bg-body-secondary"
             placeholder="Email" formControlName="email">
+        <div class="error-feedback"
+            *ngIf="hasDisplayableError('email')">
+            <div *ngIf="form.controls.email.hasError('required')">
+                Email is Required.
+            </div>
+            <div *ngIf="form.controls.email.hasError('email')">
+                Please enter a valid email address.
+            </div>
+        </div>
     </div>
     <div class="mb-3"><input type="password"
             class="form-control bg-body-secondary"
             placeholder="Password" formControlName="password">
+        <div class="error-feedback"
+            *ngIf="hasDisplayableError('password')">
+            <ng-container [ngSwitch]="form.controls.password.errors | firstKey">
+                <div
+                    *ngSwitchCase="'required'">
+                    Password is Required.
+                </div>
+                <div
+                    *ngSwitchCase="'minlength'">
+                    Password must be at least 6 characters long.
+                </div>
+                <div
+                    *ngSwitchCase="'pattern'">
+                    Password must contain at least one uppercase letter, one
+                    lowercase letter,
+                    one number, and one special character.
+                </div>
+            </ng-container>
+        </div>
     </div>
     <div class="mb-3"><input type="password"
             class="form-control bg-body-secondary"
