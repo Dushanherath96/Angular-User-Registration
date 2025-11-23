@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -7,7 +9,12 @@ import { FormBuilder, Validators } from '@angular/forms';
   styles: [],
 })
 export class LoginComponent {
-  constructor(public formBuilder: FormBuilder) {}
+  constructor(
+    public formBuilder: FormBuilder,
+    private service: AuthService,
+    private router: Router
+  ) {}
+
   isSubmitted: boolean = false;
 
   form = this.formBuilder.group({
@@ -25,6 +32,21 @@ export class LoginComponent {
   }
   onSubmit() {
     this.isSubmitted = true;
-    console.log('Form Submitted', this.form.value);
+    if (this.form.valid) {
+      this.service.signin(this.form.value).subscribe({
+        next: (res: any) => {
+          localStorage.setItem('token', res.token);
+          this.router.navigateByUrl('/dashboard');
+        },
+        error: (err) => {
+          if (err.status === 400) {
+            alert('Invalid credentials. Please try again.');
+          } else {
+            console.error('Login error:', err);
+            alert('An error occurred during login. Please try again later.');
+          }
+        },
+      });
+    }
   }
 }
