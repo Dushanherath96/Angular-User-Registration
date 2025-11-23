@@ -10,19 +10,23 @@
         </a>
     </div>
 </div>
-<form [formGroup]="form">
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="mb-3"><input
             class="form-control bg-body-secondary"
             placeholder="Email" formControlName="email">
-        <!-- <div class="error-feedback"
-            *ngIf="hasDisplayableError('fullName') && form.controls.fullName.hasError('required')">
-            Full Name is Required.
-        </div> -->
+        <div class="error-feedback"
+            *ngIf="hasDisplayableError('email') && form.controls.email.hasError('required')">
+            Email is Required.
+        </div>
     </div>
 
-    <div class="mb-3"><input
+    <div class="mb-3"><input type="password"
             class="form-control bg-body-secondary"
             placeholder="Password" formControlName="password">
+        <div class="error-feedback"
+            *ngIf="hasDisplayableError('password') && form.controls.password.hasError('required')">
+            Password is Required.
+        </div>
     </div>
     <div class="mt-4">
         <button type="submit" class="btn btn-success w-100 rounded-3">
