@@ -6,6 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { AuthService } from '../../shared/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registration',
@@ -15,7 +16,8 @@ import { AuthService } from '../../shared/services/auth.service';
 export class RegistrationComponent {
   constructor(
     public formBuilder: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
   isSubmitted: boolean = false;
 
@@ -57,11 +59,27 @@ export class RegistrationComponent {
       const payload = this.form.value;
       this.authService.createUser(this.form.value).subscribe({
         next: (res: any) => {
-          if (res.succeeded) {
+          console.log('Registration successful', res);
+          alert('Registration successful! Please sign in.');
+          // If backend returns a flag indicating success, redirect to sign-in
+          if (
+            res &&
+            (res.succeeded === true || res.success === true || res.id)
+          ) {
+            // reset and redirect to sign-in
             this.form.reset();
             this.isSubmitted = false;
+            // navigate to sign in page after successful registration
+            this.router.navigate(['/signin']);
+            return;
           }
-          console.log('Registration successful', res);
+          // fallback: show success and navigate anyway if response is truthy
+          if (res) {
+            this.form.reset();
+            this.isSubmitted = false;
+            this.router.navigate(['/signin']);
+            return;
+          }
         },
         error: (err) => console.log('error', err),
       });
