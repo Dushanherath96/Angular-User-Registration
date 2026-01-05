@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,8 @@ export class LoginComponent {
   constructor(
     public formBuilder: FormBuilder,
     private service: AuthService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {}
 
   isSubmitted: boolean = false;
@@ -40,10 +42,13 @@ export class LoginComponent {
         },
         error: (err) => {
           if (err.status === 400) {
-            alert('Invalid credentials. Please try again.');
+            this.toastr.error('Invalid email or password.', 'Login Failed');
           } else {
             console.error('Login error:', err);
-            alert('An error occurred during login. Please try again later.');
+            this.toastr.error(
+              'An error occurred during login. Please try again later.',
+              'Login Error'
+            );
           }
         },
       });

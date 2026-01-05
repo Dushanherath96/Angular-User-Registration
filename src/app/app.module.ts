@@ -12,6 +12,8 @@ import { LoginComponent } from './user/login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,9 @@ import { CommonModule } from '@angular/common';
     HttpClientModule,
     RouterOutlet,
     CommonModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
+    BrowserAnimationsModule,
     RouterLink,
   ],
   providers: [],

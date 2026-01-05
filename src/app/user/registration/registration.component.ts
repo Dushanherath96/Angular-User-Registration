@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../shared/services/auth.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-registration',
@@ -17,7 +18,8 @@ export class RegistrationComponent {
   constructor(
     public formBuilder: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {}
   isSubmitted: boolean = false;
 
@@ -60,7 +62,10 @@ export class RegistrationComponent {
       this.authService.createUser(this.form.value).subscribe({
         next: (res: any) => {
           console.log('Registration successful', res);
-          alert('Registration successful! Please sign in.');
+          this.toastr.success(
+            'Registration successful! Please sign in.',
+            'Success'
+          );
           // If backend returns a flag indicating success, redirect to sign-in
           if (
             res &&
